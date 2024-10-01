@@ -1,77 +1,64 @@
 //your JS code here. If required.
-const input = document.getElementById("ip");
-const output = document.getElementById("output");
-const btn = document.getElementById("btn");
+document.getElementById('btn').addEventListener('click', function() {
+    // Get the input value and convert it to a number
+    const inputValue = Number(document.getElementById('ip').value);
+    const outputDiv = document.getElementById('output');
 
-btn.addEventListener("click", () => {
-  const number = parseInt(input.value);
+    // Create a function that returns a promise resolving after a delay
+    function delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
 
-  if (isNaN(number)) {
-    output.innerText = "Please enter a valid number";
-    return;
-  }
+    // Step 1: Create the initial promise that resolves after 2 seconds with the input number
+    delay(2000)
+        .then(() => {
+            outputDiv.textContent = `Result: ${inputValue}`;
+            return inputValue; // Pass the input number to the next promise
+        })
 
-  startTransformation(number)
-    .then((result) => {
-      output.innerText = `Result: ${result}`;
-      return multiplyByTwo(result);
-    })
-    .then((result) => {
-      output.innerText = `Result: ${result}`;
-      return subtractThree(result);
-    })
-    .then((result) => {
-      output.innerText = `Result: ${result}`;
-      return divideByTwo(result);
-    })
-    .then((result) => {
-      output.innerText = `Result: ${result}`;
-      return addTen(result);
-    })
-    .then((finalResult) => {
-      output.innerText = `Final Result: ${finalResult}`;
-    })
-    .catch((error) => {
-      output.innerText = `Error: ${error.message}`;
-    });
+        // Step 2: Multiply the number by 2 after 1 second
+        .then(number => {
+            return delay(1000).then(() => {
+                const result = number * 2;
+                outputDiv.textContent = `Result: ${result}`;
+                return result;
+            });
+        })
+
+        // Step 3: Subtract 3 from the number after 1 second
+        .then(number => {
+            return delay(1000).then(() => {
+                const result = number - 3;
+                outputDiv.textContent = `Result: ${result}`;
+                return result;
+            });
+        })
+
+        // Step 4: Divide the number by 2 after 1 second
+        .then(number => {
+            return delay(1000).then(() => {
+                const result = number / 2;
+                outputDiv.textContent = `Result: ${result}`;
+                return result;
+            });
+        })
+
+        // Step 5: Add 10 to the number after 1 second
+        .then(number => {
+            return delay(1000).then(() => {
+                const result = number + 10;
+                outputDiv.textContent = `Result: ${result}`;
+                return result;
+            });
+        })
+
+        // Step 6: Update the text content of the output div with the final result
+        .then(finalResult => {
+            outputDiv.textContent = `Final Result: ${finalResult}`;
+        })
+
+        // Handle any errors that occur in the promise chain
+        .catch(error => {
+            outputDiv.textContent = `Error: ${error}`;
+        });
 });
-
-function startTransformation(number) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(number);
-    }, 2000);
-  });
-}
-
-function multiplyByTwo(number) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(number * 2);
-    }, 1000);
-  });
-}
-
-function subtractThree(number) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(number - 3);
-    }, 1000);
-  });
-}
-
-function divideByTwo(number) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(number / 2);
-    }, 1000);
-  });
-}
-
-function addTen(number) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(number + 10);
-    }, 1000);
-  });
-}
